@@ -1,17 +1,31 @@
 import { Avatar, Card, IconButton } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import StoryCircle from "./StoryCircle";
 import ImageIcon from "@mui/icons-material/Image";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import ArticleIcon from "@mui/icons-material/Article";
 import PostCard from "../Post/PostCard";
+import CreatePostModal from "../CreatePost/CreatePostModal";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllPostAction } from "../../redux/post/post.action";
+
 const story = [1, 1, 1, 1, 1];
-const posts = [1, 1, 1, 1, 1];
 const MiddlePart = () => {
-  const handleOpenCreatePostModal = () => {
-    console.log("OpenPostModal");
+  const dispatch = useDispatch();
+
+  const post = useSelector((store) => store.post);
+  const [openCreatePostModal, setOpenCreatePostModal] = useState(false);
+
+  const closeModal = () => {
+    setOpenCreatePostModal(false);
   };
+  const handleOpenCreatePostModal = () => {
+    setOpenCreatePostModal(true);
+  };
+  useEffect(() => {
+    dispatch(getAllPostAction());
+  }, [post.newComment]);
 
   return (
     <div className="px-20">
@@ -22,14 +36,15 @@ const MiddlePart = () => {
           </Avatar>
           <p>New</p>
         </div>
-        {story.map((item) => (
-          <StoryCircle />
+        {story.map((item, index) => (
+          <StoryCircle key={index} />
         ))}
       </section>
       <Card className="p-5 mt-5 ml-6">
         <div className="flex justify-between">
           <Avatar />
           <input
+            onClick={handleOpenCreatePostModal}
             readOnly
             className="outline-none w-[90%] bg-slate-100 
              rounded-full px-5 bg-transparent
@@ -60,9 +75,16 @@ const MiddlePart = () => {
         </div>
       </Card>
       <div className="mt-5 space-y-5 ml-6">
-        {posts.map((item) => (
-          <PostCard />
+        
+        {post.posts.map((item) => (
+          <PostCard key={item.id} item={item} />
         ))}
+      </div>
+      <div>
+        <CreatePostModal
+          openCreatePostModal={openCreatePostModal}
+          closeModal={closeModal}
+        />
       </div>
     </div>
   );

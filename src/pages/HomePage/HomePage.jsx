@@ -7,9 +7,13 @@ import Profile from "../Profile/Profile";
 import HomeRight from "../../components/HomeRight/HomeRight";
 import CreateReelsForm from "../../components/Reels/CreateReelsForm";
 import Sidebar from "../../components/Sidebar/Sidebar";
+import { useDispatch, useSelector } from "react-redux";
+import { store } from "../../store";
 
 const HomePage = () => {
+
   const location = useLocation();
+
   return (
     <div className="px-16">
       <Grid container spacing={0}>

@@ -1,8 +1,10 @@
 import { Avatar, Box, Button, Card, Tab, Tabs } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import PostCard from "../../components/Post/PostCard";
 import UserReelsCard from "../../components/Reels/UserReelsCard";
+import { useSelector } from "react-redux";
+import EditProfileModal from "./EditProfileModal";
 
 const tabs = [
   { value: "post", name: "Post" },
@@ -14,14 +16,31 @@ const posts = [1, 1, 1, 1];
 const reels = [1, 1, 1, 1];
 const savedposts = [1, 1, 1, 1];
 const Profile = () => {
+  const { auth } = useSelector((store) => store);
+
   const { id } = useParams();
-  const [value, setValue] = React.useState("post");
+  const [value, setValue] = useState("post");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const [openModal, setOpenModal] = useState(false);
+  const closeModal = () => {
+    setOpenModal(false);
+  };
+
+  const editProfileModal = async (elem) => {
+    setOpenModal(true);
+    setEditData(auth);
+  };
   return (
     <Card className="my-10 w-[80%]">
+      <EditProfileModal
+        openModal={openModal}
+        closeModal={closeModal}
+        auth={auth}
+      />
       <div className="h-[15rem]">
         <img
           className="w-full h-full rounded-t-md"
@@ -35,7 +54,11 @@ const Profile = () => {
           src="https://i.pinimg.com/564x/7c/23/f1/7c23f1cca54300f18db2c9e3097aa596.jpg"
         />
         {true ? (
-          <Button variant="outlined" sx={{ borderRadius: "20px" }}>
+          <Button
+            variant="outlined"
+            sx={{ borderRadius: "20px" }}
+            onClick={() => editProfileModal(auth)}
+          >
             Edit Profile
           </Button>
         ) : (
@@ -46,8 +69,15 @@ const Profile = () => {
       </div>
       <div className="pb-5 ml-5">
         <div>
-          <h1 className="font-bold text-xl">Code with sasmita</h1>
-          <p>@codewithsasmita</p>
+          <h1 className="font-bold text-xl">
+            {auth.user?.firstName + " " + auth.user?.lastName}
+          </h1>
+          <p>
+            @
+            {auth.user?.firstName.toLowerCase() +
+              "_" +
+              auth.user?.lastName.toLowerCase()}
+          </p>
         </div>
         <div className="flex gap-5 items-center py-3">
           <span>41 post</span>
@@ -88,7 +118,7 @@ const Profile = () => {
                 <UserReelsCard />
               ))}
             </div>
-          ) :value === "saved" ? (
+          ) : value === "saved" ? (
             <div className="space-y-5 w-[70%] my-10">
               {savedposts.map((item) => (
                 <div
@@ -99,8 +129,8 @@ const Profile = () => {
                 </div>
               ))}
             </div>
-          ): (
-           <div>Repost</div>
+          ) : (
+            <div>Repost</div>
           )}
         </div>
       </section>

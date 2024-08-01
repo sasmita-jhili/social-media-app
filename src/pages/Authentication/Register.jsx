@@ -9,8 +9,11 @@ import {
 } from "@mui/material";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import { registerUserAction } from "../../redux/Auth/auth.action";
+
 
 const Register = () => {
   const initialValues = {
@@ -27,10 +30,15 @@ const Register = () => {
       .required("Password is Required"),
   };
   const [gender, setGender] = useState("");
+
   const navigate = useNavigate();
+
+  const dispatch =useDispatch();
+
   const handleSubmit = (values) => {
     values.gender = gender;
     console.log("handleSbmit", values);
+     dispatch(registerUserAction({data:values}))
   };
 
   const handleChange = (e) => {

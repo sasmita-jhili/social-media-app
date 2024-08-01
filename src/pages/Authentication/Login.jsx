@@ -1,29 +1,29 @@
 import { Button, Card, Grid, TextField } from "@mui/material";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import { loginUserAction } from "../../redux/Auth/auth.action";
 
 const Login = () => {
   const initialValues = { email: "", password: "" };
-  const validationSchema = {
+  const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string()
       .min(6, "Password must be atleast 6 charecters")
       .required("Password is Required"),
-  };
-  const [formValue, setFormValue] = useState();
+  });
   const navigate = useNavigate();
-  const handleSubmit = () => {
-    console.log("handleSbmit");
+  const dispatch = useDispatch();
+
+  const handleSubmit = (values) => {
+    dispatch(loginUserAction({ data: values }));
   };
   return (
     <Grid container>
       <Grid className="h-screen overflow-hidden" item xs={7}>
-        <img
-          className="h-full w-full "
-          src="./image/login.svg"
-        />
+        <img className="h-full w-full " src="./image/login.svg" />
       </Grid>
       <Grid item xs={5}>
         <div className=" px-20 flex flex-col justify-center h-full">

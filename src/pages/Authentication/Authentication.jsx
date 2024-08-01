@@ -23,7 +23,9 @@ const Authentication = () => {
                 <p className="text-center text-sm w-[70&]">
                   Connecting Lives, Sharing Stories: your Social World, Your way
                 </p>
+
               </div>
+              <Login/>
             </Card>
           </div>
         </Grid>
